@@ -7,18 +7,22 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 public final class Packer extends Machine {
-
+    private UUID id;
+    private String name;
     public Packer(String name) {
-        super(name);
+        this.name = name;
+        //super(name);
     }
 
     public Packer(PackerGrpc packerGrpc) {
-        super.setId(UUID.fromString(packerGrpc.getPackerId().getValue()));
-        super.setName(packerGrpc.getName());
+        this.id = UUID.fromString(packerGrpc.getPackerId().getValue());
+        this.name = packerGrpc.getName();
+        /*super.setId(UUID.fromString(packerGrpc.getPackerId().getValue()));
+        super.setName(packerGrpc.getName());*/
     }
 
     @Override

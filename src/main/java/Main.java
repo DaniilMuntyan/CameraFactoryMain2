@@ -1,5 +1,6 @@
 import controllers.GlobalVariables;
 import controllers.grpc.*;
+import entities.camera.Camera;
 import entities.employees.Manager;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -22,23 +23,35 @@ public class Main {
 
         //collector.createManager(manager);
 
-        ProductLifecycle productLifecycle = new ProductLifecycle();
+        ProductLifecycle productLifecycle = new ProductLifecycle(channel);
 
         print();
 
-        /*for(int i = 0; i < 3; i++) {
 
-            // Assembling
-            Camera newCamera = productLifecycle.assembling();
-            print();
+        /*for(int i = 0; i < 6; i++) {
 
-            // Calibrating
-            Camera calibratedCamera = productLifecycle.calibrating(newCamera);
-            print();
+            if(i % 2 == 0) {
+                // Assembling
+                Camera newCamera = productLifecycle.assembling(false);
+                print();
 
-            // Final stage
-            productLifecycle.finalStage(calibratedCamera);
-            print();
+                // Calibrating
+                Camera calibratedCamera = productLifecycle.calibrating(newCamera, false);
+                print();
+
+                // Final stage
+                productLifecycle.finalStage(calibratedCamera, false);
+                print();
+            } else {
+                Camera newCamera = productLifecycle.assembling(true);
+                print();
+
+                Camera calibratedCamera = productLifecycle.calibrating(newCamera, true);
+                print();
+
+                productLifecycle.finalStage(calibratedCamera, true);
+                print();
+            }
 
         }*/
     }

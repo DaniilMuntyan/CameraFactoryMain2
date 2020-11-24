@@ -1,5 +1,6 @@
 package entities.machines;
 
+import controllers.grpc.MachineControllerGrpc;
 import kpi.trspo.restapp.CalibratorGrpc;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,15 +8,20 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
+@Data
+//@EqualsAndHashCode(callSuper = true)
 public final class Calibrator extends Machine {
-
+    private UUID id;
+    private String name;
     public Calibrator(String name) {
-        super(name);
+        this.name = name;
+        //super(name);
     }
 
     public Calibrator(CalibratorGrpc calibratorGrpc) {
-        super(UUID.fromString(calibratorGrpc.getCalibratorId().getValue()), calibratorGrpc.getName());
+        this.id = UUID.fromString(calibratorGrpc.getCalibratorId().getValue());
+        this.name = calibratorGrpc.getName();
+        //super(UUID.fromString(calibratorGrpc.getCalibratorId().getValue()), calibratorGrpc.getName());
     }
 
     @Override

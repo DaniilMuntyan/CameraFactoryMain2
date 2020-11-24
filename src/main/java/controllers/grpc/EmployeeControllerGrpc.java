@@ -13,11 +13,11 @@ import kpi.trspo.restapp.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class EmployeeController {
+public final class EmployeeControllerGrpc {
 
     ManagedChannel channel;
 
-    public EmployeeController(ManagedChannel channel) {
+    public EmployeeControllerGrpc(ManagedChannel channel) {
         this.channel = channel;
     }
 
@@ -31,8 +31,6 @@ public final class EmployeeController {
                 .setSurname(technician.getSurname())
                 .setPhone(technician.getPhone())
                 .build());
-
-        channel.shutdown();
 
         TechnicianGrpc technicianGrpc = createTechnicianResponse.getTechnician();
         Technician newTechnician = TechnicianConverter.convert(technicianGrpc);
@@ -50,8 +48,6 @@ public final class EmployeeController {
                 .setPhone(collector.getPhone())
                 .build());
 
-        channel.shutdown();
-
         CollectorGrpc collectorGrpc = createCollectorResponse.getCollector();
         Collector newColector = CollectorConverter.convert(collectorGrpc);
         System.out.println("CREATED COLLECTOR: " + newColector.toString());
@@ -68,14 +64,12 @@ public final class EmployeeController {
                 .setPhone(manager.getPhone())
                 .build());
 
-        channel.shutdown();
-
         ManagerGrpc managerGrpc = createManagerResponse.getManager();
         Manager newManager = ManagerConverter.convert(managerGrpc);
         System.out.println("CREATED MANAGER: " + newManager.toString());
     }
 
-    public void getManagers() {
+    public List<Manager> getManagers() {
         GetManagersServiceGrpc.GetManagersServiceBlockingStub stub
                 = GetManagersServiceGrpc.newBlockingStub(this.channel);
 
@@ -83,17 +77,16 @@ public final class EmployeeController {
                 .newBuilder()
                 .build());
 
-        channel.shutdown();
-
         List<ManagerGrpc> managerGrpcs = getManagersResponse.getManagersList();
         List<Manager> managers = managerGrpcs.stream()
                 .map(ManagerConverter::convert)
                 .collect(Collectors.toList());
 
         System.out.println(managers);
+        return managers;
     }
 
-    public void getTechnicians() {
+    public List<Technician> getTechnicians() {
         GetTechniciansServiceGrpc.GetTechniciansServiceBlockingStub stub
                 = GetTechniciansServiceGrpc.newBlockingStub(this.channel);
 
@@ -108,9 +101,11 @@ public final class EmployeeController {
 
         System.out.println(technicians);
 
+        return technicians;
+
     }
 
-    public void getCollectors() {
+    public List<Collector> getCollectors() {
         GetCollectorsServiceGrpc.GetCollectorsServiceBlockingStub stub
                 = GetCollectorsServiceGrpc.newBlockingStub(this.channel);
 
@@ -124,5 +119,7 @@ public final class EmployeeController {
                 .collect(Collectors.toList());
 
         System.out.println(collectors);
+
+        return collectors;
     }
 }

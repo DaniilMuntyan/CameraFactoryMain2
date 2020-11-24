@@ -1,7 +1,7 @@
 package controllers;
 
 public final class EndPoints {
-    private static final String URL = "http://34.77.177.79:8080"; // IP LoadBalancer'а удаленного кластера gcp
+    private static final String URL = "http://104.155.28.150:8080"; // IP LoadBalancer'а удаленного кластера gcp
 
     public static final String ASSEMBLE_CAMERA_BACK = URL + "/api/assembling/camera_back";
     public static final String ASSEMBLE_CAMERA_BODY = URL + "/api/assembling/camera_body";

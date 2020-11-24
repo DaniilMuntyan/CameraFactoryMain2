@@ -1,9 +1,17 @@
+import controllers.grpc.EmployeeControllerGrpc;
+import controllers.grpc.MachineControllerGrpc;
 import controllers.rest.models.EmployeeController;
 import controllers.rest.models.MachineController;
 import entities.camera.Dimensions;
 import entities.camera.LensType;
+import entities.employees.Collector;
 import entities.employees.Employee;
+import entities.employees.Manager;
+import entities.employees.Technician;
+import entities.machines.Calibrator;
 import entities.machines.Machine;
+import entities.machines.Packer;
+import io.grpc.ManagedChannel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,8 +25,10 @@ import java.util.Random;
 public final class InputDataHandler {
     private final DataForTesting dataForTesting;
     private final Random rand = new Random();
+    private final ManagedChannel channel;
 
-    public InputDataHandler() {
+    public InputDataHandler(ManagedChannel channel) {
+        this.channel = channel;
         this.dataForTesting = new DataForTesting();
         initializeEntities(dataForTesting);
     }
@@ -77,6 +87,9 @@ public final class InputDataHandler {
         EmployeeController employeeController = new EmployeeController();
         MachineController machineController = new MachineController();
 
+        EmployeeControllerGrpc employeeControllerGrpc = new EmployeeControllerGrpc(this.channel);
+        MachineControllerGrpc machineControllerGrpc = new MachineControllerGrpc(this.channel);
+
         // Managers initialization
         for(int i = 0; i < 5; i++) {
             List<String> nameSurnamePhone = getNameSurnamePhone(dataForTesting);
@@ -84,11 +97,12 @@ public final class InputDataHandler {
             if (i % 2 == 0) {
                 manager = employeeController
                         .createManager(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
+                System.out.println("CREATED " + manager.toString());
             } else {
-
+                employeeControllerGrpc.createManager(new Manager(nameSurnamePhone.get(0),
+                        nameSurnamePhone.get(1), nameSurnamePhone.get(2)));
             }
 
-            System.out.println("CREATED " + manager.toString());
         }
 
         // Collectors and technicians initialization
@@ -97,26 +111,38 @@ public final class InputDataHandler {
             Employee collector;
             Employee technician;
 
-            collector = employeeController
-                    .createCollector(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
+            if(i % 2 == 0) {
 
-            nameSurnamePhone = getNameSurnamePhone(dataForTesting);
-            technician = employeeController
-                    .createTechnician(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
+                collector = employeeController
+                        .createCollector(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
 
-            System.out.println("CREATED " + collector.toString());
-            System.out.println("CREATED " + technician.toString());
+                nameSurnamePhone = getNameSurnamePhone(dataForTesting);
+                technician = employeeController
+                        .createTechnician(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
+
+                System.out.println("CREATED " + collector.toString());
+                System.out.println("CREATED " + technician.toString());
+            } else {
+                employeeControllerGrpc.createCollector(new Collector(nameSurnamePhone.get(0),
+                        nameSurnamePhone.get(1), nameSurnamePhone.get(2)));
+                employeeControllerGrpc.createTechnician(new Technician(nameSurnamePhone.get(0),
+                        nameSurnamePhone.get(1), nameSurnamePhone.get(2)));
+            }
         }
 
         // Machines initialization
         for(int i = 0; i < 5; ++i) {
-            Machine calibrator = machineController.createCalibrator(getRandomFromList(dataForTesting.robots));
-            //Machine tester = machineController.createTester(getRandomFromList(dataForTesting.robots));
-            Machine packer = machineController.createPacker(getRandomFromList(dataForTesting.robots));
 
-            System.out.println("CREATED " + calibrator.toString());
-            //System.out.println("CREATED " + tester.toString());
-            System.out.println("CREATED " + packer.toString());
+            if (i % 2 == 0) {
+                Machine calibrator = machineController.createCalibrator(getRandomFromList(dataForTesting.robots));
+                Machine packer = machineController.createPacker(getRandomFromList(dataForTesting.robots));
+
+                System.out.println("CREATED " + calibrator.toString());
+                System.out.println("CREATED " + packer.toString());
+            } else {
+                machineControllerGrpc.createCalibrator(new Calibrator(getRandomFromList(dataForTesting.robots)));
+                machineControllerGrpc.createPacker(new Packer(getRandomFromList(dataForTesting.robots)));
+            }
         }
     }
 

@@ -10,11 +10,11 @@ import kpi.trspo.restapp.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class MachineController {
+public final class MachineControllerGrpc {
 
     ManagedChannel channel;
 
-    public MachineController(ManagedChannel channel) {
+    public MachineControllerGrpc(ManagedChannel channel) {
         this.channel = channel;
     }
 
@@ -47,7 +47,7 @@ public final class MachineController {
     }
 
 
-    public void getPackers() {
+    public List<Packer> getPackers() {
         GetPackersServiceGrpc.GetPackersServiceBlockingStub stub
                 = GetPackersServiceGrpc.newBlockingStub(this.channel);
 
@@ -61,11 +61,12 @@ public final class MachineController {
                 .collect(Collectors.toList());
 
         System.out.println(packers);
+        return packers;
     }
 
 
 
-    public void getCalibrators() {
+    public List<Calibrator> getCalibrators() {
         GetCalibratorsServiceGrpc.GetCalibratorsServiceBlockingStub stub
                 = GetCalibratorsServiceGrpc.newBlockingStub(this.channel);
 
@@ -79,6 +80,7 @@ public final class MachineController {
                 .collect(Collectors.toList());
 
         System.out.println(calibrators);
+        return calibrators;
     }
 
 }
