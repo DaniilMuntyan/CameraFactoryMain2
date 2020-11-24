@@ -1,0 +1,38 @@
+syntax = "proto3";
+option java_multiple_files = true;
+import "google/protobuf/empty.proto";
+import "myUuid.proto";
+package kpi.trspo.restapp;
+
+message CollectorGrpc {
+  MyUuid collectorId = 1;
+  string name = 2;
+  string surname = 3;
+  string phone = 4;
+}
+
+message GetAllCollectorsRequest {
+  google.protobuf.Empty value = 1;
+}
+
+message GetAllCollectorsResponse {
+  repeated CollectorGrpc collectors = 1;
+}
+
+message CreateCollectorRequest {
+  string name = 1;
+  string surname = 2;
+  string phone = 3;
+}
+
+message CreateCollectorResponse {
+  CollectorGrpc collector = 1;
+}
+
+service GetCollectorsService {
+  rpc getAllCollectors(GetAllCollectorsRequest) returns (GetAllCollectorsResponse);
+}
+
+service CreateCollectorsService {
+  rpc createCollectors(CreateCollectorRequest) returns (CreateCollectorResponse);
+}

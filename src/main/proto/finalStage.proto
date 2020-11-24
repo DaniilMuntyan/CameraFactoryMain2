@@ -1,0 +1,22 @@
+syntax = "proto3";
+option java_multiple_files = true;
+import "google/protobuf/empty.proto";
+import "myUuid.proto";
+import "dimensions.proto";
+import "cameraParts.proto";
+package kpi.trspo.restapp;
+
+message FinalStageRequest {
+  MyUuid technicianId = 1;
+  MyUuid managerId = 2;
+  MyUuid packerId = 3;
+  CameraGrpc camera = 4;
+}
+
+message FinalStageResponse {
+  CameraGrpc camera = 1;
+}
+
+service FinalStageService {
+  rpc finalStage(FinalStageRequest) returns (FinalStageResponse);
+}

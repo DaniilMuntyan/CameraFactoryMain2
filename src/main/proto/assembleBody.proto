@@ -1,0 +1,21 @@
+syntax = "proto3";
+option java_multiple_files = true;
+import "google/protobuf/empty.proto";
+import "myUuid.proto";
+import "dimensions.proto";
+import "cameraParts.proto";
+package kpi.trspo.restapp;
+
+message AssembleBodyRequest {
+  MyUuid collectorId = 1;
+  Dimensions dimensions = 2;
+  string color = 3;
+}
+
+message AssembleBodyResponse {
+    CameraBodyGrpc cameraBody = 1;
+}
+
+service AssembleBodyService {
+  rpc assembleBody(AssembleBodyRequest) returns (AssembleBodyResponse);
+}

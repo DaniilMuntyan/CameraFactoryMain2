@@ -1,0 +1,20 @@
+syntax = "proto3";
+option java_multiple_files = true;
+import "google/protobuf/empty.proto";
+import "myUuid.proto";
+import "dimensions.proto";
+import "cameraParts.proto";
+package kpi.trspo.restapp;
+
+message CalibrateCameraRequest {
+  MyUuid calibratorId = 1;
+  CameraGrpc camera = 2;
+}
+
+message CalibrateCameraResponse {
+  CameraGrpc camera = 1;
+}
+
+service CalibrateCameraService {
+  rpc calibrate(CalibrateCameraRequest) returns (CalibrateCameraResponse);
+}

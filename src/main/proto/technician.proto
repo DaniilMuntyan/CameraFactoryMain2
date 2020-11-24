@@ -1,0 +1,38 @@
+syntax = "proto3";
+option java_multiple_files = true;
+import "google/protobuf/empty.proto";
+import "myUuid.proto";
+package kpi.trspo.restapp;
+
+message TechnicianGrpc {
+  MyUuid id = 1;
+  string name = 2;
+  string surname = 3;
+  string phone = 4;
+}
+
+message GetTechniciansRequest {
+  google.protobuf.Empty value = 1;
+}
+
+message GetTechniciansResponse {
+  repeated TechnicianGrpc technicians = 1;
+}
+
+message CreateTechnicianRequest {
+  string name = 1;
+  string surname = 2;
+  string phone = 3;
+}
+
+message CreateTechnicianResponse {
+  TechnicianGrpc technician = 1;
+}
+
+service GetTechniciansService {
+  rpc getTechnicians(GetTechniciansRequest) returns (GetTechniciansResponse);
+}
+
+service CreateTechnicianService {
+  rpc createTechnician(CreateTechnicianRequest) returns (CreateTechnicianResponse);
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+option java_multiple_files = true;
+import "google/protobuf/empty.proto";
+import "myUuid.proto";
+package kpi.trspo.restapp;
+
+message CalibratorGrpc {
+  MyUuid calibratorId = 1;
+  string name = 2;
+}
+
+message GetCalibratorsRequest {
+  google.protobuf.Empty value = 1;
+}
+
+message GetCalibratorsResponse {
+  repeated CalibratorGrpc calibrators = 1;
+}
+
+message CreateCalibratorRequest {
+  string name = 1;
+}
+
+message CreateCalibratorResponse {
+  CalibratorGrpc calibrator = 1;
+}
+
+service CreateCalibratorsService {
+  rpc createCalibrator(CreateCalibratorRequest) returns (CreateCalibratorResponse);
+}
+
+service GetCalibratorsService {
+  rpc getAllCalibrators(GetCalibratorsRequest) returns (GetCalibratorsResponse);
+}
+

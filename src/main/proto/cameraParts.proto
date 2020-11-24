@@ -1,0 +1,47 @@
+syntax = "proto3";
+option java_multiple_files = true;
+import "myUuid.proto";
+import "dimensions.proto";
+package kpi.trspo.restapp;
+
+enum LensType {
+  WIDE_ANGLE = 0;
+  ULTRA_WIDE_ANGLE = 1;
+  LONG_FOCUS = 2;
+  SUPERTELEFOTO = 3;
+  ZOOM = 4;
+  SUPER_ZOOM = 5;
+}
+
+message CameraBackGrpc {
+  MyUuid backId = 1;
+  bool matrixCheck = 2;
+  Dimensions dimensions = 3;
+  int32 resolution = 4;
+  int32 colorDepth = 5;
+}
+
+message CameraBodyGrpc {
+  MyUuid bodyId = 1;
+  Dimensions dimensions = 2;
+  string color = 3;
+}
+
+message CameraLensGrpc {
+  MyUuid lensId = 1;
+  int32 focalLength = 2;
+  LensType lensType = 3;
+}
+
+message CameraGrpc {
+  MyUuid cameraId = 1;
+  string innerInfo = 2;
+  bool isPacked = 3;
+  bool isFirmware = 4;
+  bool isWipedClean = 5;
+  bool isRejected = 6;
+  CameraBackGrpc cameraBack = 7;
+  CameraBodyGrpc cameraBody = 8;
+  CameraLensGrpc cameraLens = 9;
+}
+

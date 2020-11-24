@@ -1,0 +1,34 @@
+syntax = "proto3";
+option java_multiple_files = true;
+import "google/protobuf/empty.proto";
+import "myUuid.proto";
+package kpi.trspo.restapp;
+
+message PackerGrpc {
+  MyUuid packerId = 1;
+  string name = 2;
+}
+
+message GetAllPackersRequest {
+  google.protobuf.Empty value = 1;
+}
+
+message GetAllPackersResponse {
+  repeated PackerGrpc packers = 1;
+}
+
+message CreatePackerRequest {
+  string name = 1;
+}
+
+message CreatePackerResponse {
+  PackerGrpc packer = 1;
+}
+
+service GetPackersService {
+  rpc getAllPackers(GetAllPackersRequest) returns (GetAllPackersResponse);
+}
+
+service CreatePackersService {
+  rpc createPackers(CreatePackerRequest) returns (CreatePackerResponse);
+}
