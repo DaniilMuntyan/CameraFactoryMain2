@@ -6,7 +6,11 @@ import entities.employees.Manager;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import kpi.trspo.restapp.CameraGrpc;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
     private static final String splitter = "-----------------------------------------------------------------------" +

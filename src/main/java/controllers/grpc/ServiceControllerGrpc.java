@@ -30,6 +30,8 @@ public class ServiceControllerGrpc {
         MyUuid technicianId = MyUuid.newBuilder().setValue(technician.getId().toString()).build();
         MyUuid packerId = MyUuid.newBuilder().setValue(packer.getId().toString()).build();
         MyUuid managerId = MyUuid.newBuilder().setValue(manager.getId().toString()).build();
+
+        long startTime = System.currentTimeMillis();
         FinalStageResponse finalStageResponse = stub.finalStage(FinalStageRequest
             .newBuilder()
             .setTechnicianId(technicianId)
@@ -37,10 +39,12 @@ public class ServiceControllerGrpc {
             .setManagerId(managerId)
             .setCamera(CameraConverter.convert(camera))
             .build());
+        long endTime = System.currentTimeMillis();
 
         CameraGrpc cameraGrpc = finalStageResponse.getCamera();
         Camera newCamera = CameraConverter.convert(cameraGrpc);
-        System.out.println("[GRPC] FINAL STAGE CAMERA: " + newCamera.toString());
+        System.out.println("[GRPC] (" + (endTime - startTime) + " ms) FINAL STAGE CAMERA: " +
+                newCamera.toString());
         return newCamera;
     }
 
@@ -48,15 +52,18 @@ public class ServiceControllerGrpc {
         CalibrateCameraServiceGrpc.CalibrateCameraServiceBlockingStub stub
                 = CalibrateCameraServiceGrpc.newBlockingStub(this.channel);
         MyUuid calibratorId = MyUuid.newBuilder().setValue(calibrator.getId().toString()).build();
+
+        long startTime = System.currentTimeMillis();
         CalibrateCameraResponse calibrateCameraResponse = stub.calibrate(CalibrateCameraRequest
                 .newBuilder()
                 .setCalibratorId(calibratorId)
                 .setCamera(CameraConverter.convert(camera))
                 .build());
+        long endTime = System.currentTimeMillis();
 
         CameraGrpc cameraGrpc = calibrateCameraResponse.getCamera();
         Camera newCamera = CameraConverter.convert(cameraGrpc);
-        System.out.println("[GRPC] CALIBRATED CAMERA: " + newCamera.toString());
+        System.out.println("[GRPC] (" + (endTime - startTime) + " ms) CALIBRATED CAMERA: " + newCamera.toString());
         return newCamera;
     }
 
@@ -68,6 +75,8 @@ public class ServiceControllerGrpc {
         MyUuid backId = MyUuid.newBuilder().setValue(cameraBack.getId().toString()).build();
         MyUuid bodyId = MyUuid.newBuilder().setValue(cameraBody.getId().toString()).build();
         MyUuid lensId = MyUuid.newBuilder().setValue(cameraLens.getId().toString()).build();
+
+        long startTime = System.currentTimeMillis();
         AssembleCameraResponse assembleCameraResponse = stub.assembleCamera(AssembleCameraRequest
                 .newBuilder()
                 .setCollectorId(id)
@@ -75,10 +84,11 @@ public class ServiceControllerGrpc {
                 .setBodyId(bodyId)
                 .setLensId(lensId)
                 .build());
+        long endTime = System.currentTimeMillis();
 
         CameraGrpc cameraGrpc = assembleCameraResponse.getCamera();
         Camera camera = CameraConverter.convert(cameraGrpc);
-        System.out.println("[GRPC] ASSEMBLED CAMERA: " + camera.toString());
+        System.out.println("[GRPC] (" + (endTime - startTime) + " ms) ASSEMBLED CAMERA: " + camera.toString());
         return camera;
     }
 
@@ -86,16 +96,20 @@ public class ServiceControllerGrpc {
         AssembleLensServiceGrpc.AssembleLensServiceBlockingStub stub
                 = AssembleLensServiceGrpc.newBlockingStub(this.channel);
         MyUuid id = MyUuid.newBuilder().setValue(collector.getId().toString()).build();
+
+        long startTime = System.currentTimeMillis();
         AssembleLensResponse assembleLensResponse = stub.assembleLens(AssembleLensRequest
                 .newBuilder()
                 .setCollectorId(id)
                 .setFocalLength(focalLength)
                 .setLensType(kpi.trspo.restapp.LensType.valueOf(lensType.name()))
                 .build());
+        long endTime = System.currentTimeMillis();
 
         CameraLensGrpc cameraLensGrpc = assembleLensResponse.getCameraLens();
         CameraLens cameraLens = CameraLensConverter.convert(cameraLensGrpc);
-        System.out.println("[GRPC] ASSEMBLED CAMERA LENS: " + cameraLens.toString());
+        System.out.println("[GRPC] (" + (endTime - startTime) + " ms) ASSEMBLED CAMERA LENS: " +
+                cameraLens.toString());
         return cameraLens;
     }
 
@@ -103,6 +117,8 @@ public class ServiceControllerGrpc {
         AssembleBodyServiceGrpc.AssembleBodyServiceBlockingStub stub
                 = AssembleBodyServiceGrpc.newBlockingStub(this.channel);
         MyUuid id = MyUuid.newBuilder().setValue(collector.getId().toString()).build();
+
+        long startTime = System.currentTimeMillis();
         AssembleBodyResponse assembleBodyResponse = stub.assembleBody(AssembleBodyRequest
                 .newBuilder()
                 .setCollectorId(id)
@@ -113,10 +129,12 @@ public class ServiceControllerGrpc {
                         .build())
                 .setColor(color)
                 .build());
+        long endTime = System.currentTimeMillis();
 
         CameraBodyGrpc cameraBodyGrpc = assembleBodyResponse.getCameraBody();
         CameraBody cameraBody = CameraBodyConverter.convert(cameraBodyGrpc);
-        System.out.println("[GRPC] ASSEMBLED CAMERA BODY: " + cameraBody.toString());
+        System.out.println("[GRPC] (" + (endTime - startTime) + " ms) ASSEMBLED CAMERA BODY: " +
+                cameraBody.toString());
         return cameraBody;
     }
 
@@ -125,6 +143,8 @@ public class ServiceControllerGrpc {
         AssembleBackServiceGrpc.AssembleBackServiceBlockingStub stub
                 = AssembleBackServiceGrpc.newBlockingStub(this.channel);
         MyUuid id = MyUuid.newBuilder().setValue(collector.getId().toString()).build();
+
+        long startTime = System.currentTimeMillis();
         AssembleBackResponse assembleBackResponse = stub.assembleBack(AssembleBackRequest
                 .newBuilder()
                 .setCollectorId(id)
@@ -136,9 +156,12 @@ public class ServiceControllerGrpc {
                 .setColorDepth(colorDepth)
                 .setResolution(resolution)
                 .build());
+        long endTime = System.currentTimeMillis();
+
         CameraBackGrpc cameraBackGrpc = assembleBackResponse.getCameraBack();
         CameraBack cameraBack = CameraBackConverter.convert(cameraBackGrpc);
-        System.out.println("[GRPC] ASSEMBLED CAMERA BACK: " + cameraBack.toString());
+        System.out.println("[GRPC] (" + (endTime - startTime) + " ms) ASSEMBLED CAMERA BACK: " +
+                cameraBack.toString());
         return cameraBack;
     }
 }

@@ -51,6 +51,9 @@ public final class ProductLifecycle {
         LensType lensType = inputDataHandler.getRandomLens();
         Camera camera = null;
 
+        long startTime;
+        long endTime;
+
         if (!grpc) {
 
             collectors = employeeController.getAllCollectors();
@@ -62,24 +65,39 @@ public final class ProductLifecycle {
 
             AssembleController assembleController = new AssembleController();
 
+            startTime = System.currentTimeMillis();
             CameraBack cameraBack = assembleController.assembleCameraBack(collectorCameraBack, backDimensions,
                     resolutionBack, colorDepth);
-            System.out.println("[REST] ASSEMBLED BY " + collectorCameraBack.getName() + " " +
-                    collectorCameraBack.getSurname() + "\n" + cameraBack.toString());
+            endTime = System.currentTimeMillis();
 
+            System.out.println("[REST] (" + (endTime - startTime) + " ms) ASSEMBLED BY " +
+                    collectorCameraBack.getName() + " " + collectorCameraBack.getSurname() + "\n" +
+                    cameraBack.toString());
+
+            startTime = System.currentTimeMillis();
             CameraBody cameraBody = assembleController.assembleCameraBody(collectorCameraBody, bodyDimensions, color);
-            System.out.println("[REST] ASSEMBLED BY " + collectorCameraBody.getName() + " " + collectorCameraBody.getSurname() +
+            endTime = System.currentTimeMillis();
+
+            System.out.println("[REST] (" + (endTime - startTime) + " ms) ASSEMBLED BY " +
+                    collectorCameraBody.getName() + " " + collectorCameraBody.getSurname() +
                     "\n" + cameraBody.toString());
 
+            startTime = System.currentTimeMillis();
             CameraLens cameraLens = assembleController.assembleCameraLens(collectorCameraLens, focalLength, lensType);
-            System.out.println("[REST] ASSEMBLED BY " + collectorCameraLens.getName() + " " + collectorCameraLens.getSurname() +
+            endTime = System.currentTimeMillis();
+
+            System.out.println("[REST] (" + (endTime - startTime) + " ms) ASSEMBLED BY " +
+                    collectorCameraLens.getName() + " " + collectorCameraLens.getSurname() +
                     "\n" + cameraLens.toString());
 
+            startTime = System.currentTimeMillis();
             camera = assembleController.assembleCamera(collectorCamera, cameraBack, cameraBody, cameraLens);
-            System.out.println("[REST] ASSEMBLED BY " + collectorCamera.getName() + " " + collectorCamera.getSurname() + "\n" +
+            endTime = System.currentTimeMillis();
+
+            System.out.println("[REST] (" + (endTime - startTime) + " ms) ASSEMBLED BY " +
+                    collectorCamera.getName() + " " + collectorCamera.getSurname() + "\n" +
                     camera.toString());
         } else {
-
             collectors = employeeControllerGrpc.getCollectors();
 
             collectorCameraBack = this.inputDataHandler.getRandomFromList(collectors);
@@ -99,6 +117,8 @@ public final class ProductLifecycle {
 
     public Camera calibrating(Camera camera, Boolean grpc) {
         Camera newCamera;
+        long startTime;
+        long endTime;
 
         if(!grpc) {
             MachineController machineController = new MachineController();
@@ -107,8 +127,13 @@ public final class ProductLifecycle {
             Machine calibrator = inputDataHandler.getRandomFromList(calibrators);
 
             CalibrationController calibrationController = new CalibrationController((Calibrator) calibrator);
+
+            startTime = System.currentTimeMillis();
             newCamera = calibrationController.calibrateCamera(camera);
-            System.out.println("[REST] CALIBRATED BY " + calibrator.getName() + "\n" + newCamera);
+            endTime = System.currentTimeMillis();
+
+            System.out.println("[REST] (" + (endTime - startTime) + " ms) CALIBRATED BY " +
+                    calibrator.getName() + "\n" + newCamera);
 
         } else {
             MachineControllerGrpc machineControllerGrpc = new MachineControllerGrpc(channel);
@@ -126,6 +151,8 @@ public final class ProductLifecycle {
         MachineController machineController = new MachineController();
         EmployeeControllerGrpc employeeControllerGrpc = new EmployeeControllerGrpc(this.channel);
         MachineControllerGrpc machineControllerGrpc = new MachineControllerGrpc(this.channel);
+        long startTime;
+        long endTime;
 
         List<Technician> technicians;
         List<Manager> managers;
@@ -148,8 +175,12 @@ public final class ProductLifecycle {
             FinalStageController finalStageController =
                     new FinalStageController((Technician) technician, (Manager) manager, (Packer) packer);
 
+            startTime = System.currentTimeMillis();
             finalCamera = finalStageController.finalStage(camera);
-            System.out.println("[REST] FINAL STAGE\n" + "MANAGER " + manager.getName() + " " + manager.getSurname() + "\n" +
+            endTime = System.currentTimeMillis();
+
+            System.out.println("[REST] (" + (endTime - startTime) + " ms) FINAL STAGE\n" + "MANAGER " +
+                    manager.getName() + " " + manager.getSurname() + "\n" +
                     "TECHNICIAN " + technician.getName() + " " + technician.getSurname() + "\n" +
                     "PACKER MACHINE " + packer.getName() + "\n" + finalCamera);
         } else {

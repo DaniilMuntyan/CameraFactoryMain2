@@ -89,15 +89,20 @@ public final class InputDataHandler {
 
         EmployeeControllerGrpc employeeControllerGrpc = new EmployeeControllerGrpc(this.channel);
         MachineControllerGrpc machineControllerGrpc = new MachineControllerGrpc(this.channel);
+        long startTime;
+        long endTime;
 
         // Managers initialization
         for(int i = 0; i < 5; i++) {
             List<String> nameSurnamePhone = getNameSurnamePhone(dataForTesting);
             Employee manager = null;
             if (i % 2 == 0) {
+                startTime = System.currentTimeMillis();
                 manager = employeeController
                         .createManager(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
-                System.out.println("[REST] CREATED " + manager.toString());
+                endTime = System.currentTimeMillis();
+
+                System.out.println("[REST] (" + (endTime - startTime) + " ms) CREATED " + manager.toString());
             } else {
                 employeeControllerGrpc.createManager(new Manager(nameSurnamePhone.get(0),
                         nameSurnamePhone.get(1), nameSurnamePhone.get(2)));
@@ -112,15 +117,17 @@ public final class InputDataHandler {
             Employee technician;
 
             if(i % 2 == 0) {
+                startTime = System.currentTimeMillis();
                 collector = employeeController
                         .createCollector(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
+                endTime = System.currentTimeMillis();
 
                 nameSurnamePhone = getNameSurnamePhone(dataForTesting);
                 technician = employeeController
                         .createTechnician(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
 
-                System.out.println("[REST] CREATED " + collector.toString());
-                System.out.println("[REST] CREATED " + technician.toString());
+                System.out.println("[REST] (" + (endTime - startTime) + " ms) CREATED " + collector.toString());
+                System.out.println("[REST] (" + (endTime - startTime) + " ms) CREATED " + technician.toString());
             } else {
                 employeeControllerGrpc.createCollector(new Collector(nameSurnamePhone.get(0),
                         nameSurnamePhone.get(1), nameSurnamePhone.get(2)));
@@ -133,11 +140,17 @@ public final class InputDataHandler {
         for(int i = 0; i < 5; ++i) {
 
             if (i % 2 == 0) {
+                startTime = System.currentTimeMillis();
                 Machine calibrator = machineController.createCalibrator(getRandomFromList(dataForTesting.robots));
-                Machine packer = machineController.createPacker(getRandomFromList(dataForTesting.robots));
+                endTime = System.currentTimeMillis();
 
-                System.out.println("[REST] CREATED " + calibrator.toString());
-                System.out.println("[REST] CREATED " + packer.toString());
+                System.out.println("[REST] (" + (endTime - startTime) + " ms) CREATED " + calibrator.toString());
+
+                startTime = System.currentTimeMillis();
+                Machine packer = machineController.createPacker(getRandomFromList(dataForTesting.robots));
+                endTime = System.currentTimeMillis();
+
+                System.out.println("[REST] (" + (endTime - startTime) + " ms) CREATED " + packer.toString());
             } else {
                 machineControllerGrpc.createCalibrator(new Calibrator(getRandomFromList(dataForTesting.robots)));
                 machineControllerGrpc.createPacker(new Packer(getRandomFromList(dataForTesting.robots)));
