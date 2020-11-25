@@ -25,9 +25,9 @@ public final class CameraBackConverter {
                         .setLength(dimensions.getLength())
                         .setDepth(dimensions.getDepth())
                         .setWidth(dimensions.getWidth()))
-                .setColorDepth(cameraBack.getColorDepth())
-                .setMatrixCheck(cameraBack.getMatrixCheck())
-                .setResolution(cameraBack.getResolution())
+                .setColorDepth((cameraBack.getColorDepth() != null) ? cameraBack.getColorDepth(): 0)
+                .setMatrixCheck((cameraBack.getMatrixCheck() != null) ? cameraBack.getMatrixCheck(): false)
+                .setResolution((cameraBack.getResolution() != null) ? cameraBack.getResolution(): 0)
                 .build();
     }
 }

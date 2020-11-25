@@ -29,7 +29,7 @@ public final class MachineControllerGrpc {
 
         PackerGrpc packerGrpc = createPackerResponse.getPacker();
         Packer newPacker = PackerConverter.convert(packerGrpc);
-        System.out.println("CREATED PACKER: " + newPacker.toString());
+        System.out.println("[GRPC] CREATED PACKER: " + newPacker.toString());
     }
 
     public void createCalibrator(Calibrator calibrator) {
@@ -43,9 +43,8 @@ public final class MachineControllerGrpc {
 
         CalibratorGrpc calibratorGrpc = createCalibratorResponse.getCalibrator();
         Calibrator newCalibrator = CalibratorConverter.convert(calibratorGrpc);
-        System.out.println("CREATED CALIBRATOR: " + newCalibrator.toString());
+        System.out.println("[GRPC] CREATED CALIBRATOR: " + newCalibrator.toString());
     }
-
 
     public List<Packer> getPackers() {
         GetPackersServiceGrpc.GetPackersServiceBlockingStub stub
@@ -60,11 +59,9 @@ public final class MachineControllerGrpc {
                 .map(PackerConverter::convert)
                 .collect(Collectors.toList());
 
-        System.out.println(packers);
+        System.out.println("[GRPC] " + packers);
         return packers;
     }
-
-
 
     public List<Calibrator> getCalibrators() {
         GetCalibratorsServiceGrpc.GetCalibratorsServiceBlockingStub stub
@@ -79,7 +76,7 @@ public final class MachineControllerGrpc {
                 .map(CalibratorConverter::convert)
                 .collect(Collectors.toList());
 
-        System.out.println(calibrators);
+        System.out.println("[GRPC] " + calibrators);
         return calibrators;
     }
 

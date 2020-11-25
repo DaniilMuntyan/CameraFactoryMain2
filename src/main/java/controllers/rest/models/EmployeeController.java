@@ -24,11 +24,6 @@ public final class EmployeeController {
         return this.createEmployee(EndPoints.CREATE_MANAGER, manager, Manager.class);
     }
 
-   /* public Manager createManagerGrpc(String name, String surname, String phone) {
-        Manager manager = new Manager(name, surname, phone);
-
-    }*/
-
     public Technician createTechnician(String name, String surname, String phone) {
         Technician technician = new Technician(name, surname, phone);
         return this.createEmployee(EndPoints.CREATE_TECHNICIAN, technician, Technician.class);

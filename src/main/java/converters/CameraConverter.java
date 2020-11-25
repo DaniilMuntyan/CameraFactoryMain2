@@ -18,7 +18,7 @@ public final class CameraConverter {
         CameraBackGrpc cameraBackGrpc = CameraBackConverter.convert(camera.getCameraBack());
         CameraBodyGrpc cameraBodyGrpc = CameraBodyConverter.convert(camera.getCameraBody());
         CameraLensGrpc cameraLensGrpc = CameraLensConverter.convert(camera.getCameraLens());
-        return CameraGrpc
+        CameraGrpc cameraGrpc = CameraGrpc
                 .newBuilder()
                 .setCameraId(id)
                 .setInnerInfo(camera.getInnerInfo())
@@ -30,5 +30,11 @@ public final class CameraConverter {
                 .setCameraBody(cameraBodyGrpc)
                 .setCameraLens(cameraLensGrpc)
                 .build();
+        /*System.out.println("\n\n");
+        System.out.println(camera);
+        System.out.println("\n--------------");
+        System.out.println(cameraGrpc.getAllFields());
+        System.out.println("\n--------------");*/
+        return cameraGrpc;
     }
 }

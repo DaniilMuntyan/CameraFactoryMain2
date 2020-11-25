@@ -9,19 +9,15 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Data
-//@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public final class Calibrator extends Machine {
-    private UUID id;
-    private String name;
     public Calibrator(String name) {
-        this.name = name;
-        //super(name);
+        super(name);
     }
 
     public Calibrator(CalibratorGrpc calibratorGrpc) {
-        this.id = UUID.fromString(calibratorGrpc.getCalibratorId().getValue());
-        this.name = calibratorGrpc.getName();
-        //super(UUID.fromString(calibratorGrpc.getCalibratorId().getValue()), calibratorGrpc.getName());
+        super(UUID.fromString(calibratorGrpc.getCalibratorId().getValue()), calibratorGrpc.getName());
     }
 
     @Override

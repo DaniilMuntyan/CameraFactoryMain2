@@ -24,9 +24,10 @@ public final class CameraBack {
 
     public CameraBack(CameraBackGrpc cameraBackGrpc) {
         this.id = UUID.fromString(cameraBackGrpc.getBackId().getValue());
-        this.matrixCheck = cameraBackGrpc.getMatrixCheck();
+        this.matrixCheck = (cameraBackGrpc.getMatrixCheck());
         this.dimensions = new Dimensions(cameraBackGrpc.getDimensions());
         this.colorDepth = cameraBackGrpc.getColorDepth();
+        this.resolution = cameraBackGrpc.getResolution();
     }
 
     @Override

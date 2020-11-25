@@ -34,12 +34,14 @@ public final class ProductLifecycle {
 
     public Camera assembling(Boolean grpc) {
         EmployeeController employeeController = new EmployeeController();
+        EmployeeControllerGrpc employeeControllerGrpc = new EmployeeControllerGrpc(this.channel);
 
-        List<Collector> collectors = employeeController.getAllCollectors();
-        Collector collectorCameraBack = this.inputDataHandler.getRandomFromList(collectors);
-        Collector collectorCameraBody = this.inputDataHandler.getRandomFromList(collectors);
-        Collector collectorCameraLens = this.inputDataHandler.getRandomFromList(collectors);
-        Collector collectorCamera = this.inputDataHandler.getRandomFromList(collectors);
+        List<Collector> collectors;
+        Collector collectorCameraBack;
+        Collector collectorCameraBody;
+        Collector collectorCameraLens;
+        Collector collectorCamera;
+
         Dimensions backDimensions = inputDataHandler.getRandomDimensions();
         Integer resolutionBack = 20 + rand.nextInt(100);
         Integer colorDepth = 10 + rand.nextInt(100);
@@ -51,25 +53,40 @@ public final class ProductLifecycle {
 
         if (!grpc) {
 
+            collectors = employeeController.getAllCollectors();
+
+            collectorCameraBack = this.inputDataHandler.getRandomFromList(collectors);
+            collectorCameraBody = this.inputDataHandler.getRandomFromList(collectors);
+            collectorCameraLens = this.inputDataHandler.getRandomFromList(collectors);
+            collectorCamera = this.inputDataHandler.getRandomFromList(collectors);
+
             AssembleController assembleController = new AssembleController();
 
             CameraBack cameraBack = assembleController.assembleCameraBack(collectorCameraBack, backDimensions,
                     resolutionBack, colorDepth);
-            System.out.println("ASSEMBLED BY " + collectorCameraBack.getName() + " " +
+            System.out.println("[REST] ASSEMBLED BY " + collectorCameraBack.getName() + " " +
                     collectorCameraBack.getSurname() + "\n" + cameraBack.toString());
 
             CameraBody cameraBody = assembleController.assembleCameraBody(collectorCameraBody, bodyDimensions, color);
-            System.out.println("ASSEMBLED BY " + collectorCameraBody.getName() + " " + collectorCameraBody.getSurname() +
+            System.out.println("[REST] ASSEMBLED BY " + collectorCameraBody.getName() + " " + collectorCameraBody.getSurname() +
                     "\n" + cameraBody.toString());
 
             CameraLens cameraLens = assembleController.assembleCameraLens(collectorCameraLens, focalLength, lensType);
-            System.out.println("ASSEMBLED BY " + collectorCameraLens.getName() + " " + collectorCameraLens.getSurname() +
+            System.out.println("[REST] ASSEMBLED BY " + collectorCameraLens.getName() + " " + collectorCameraLens.getSurname() +
                     "\n" + cameraLens.toString());
 
             camera = assembleController.assembleCamera(collectorCamera, cameraBack, cameraBody, cameraLens);
-            System.out.println("ASSEMBLED BY " + collectorCamera.getName() + " " + collectorCamera.getSurname() + "\n" +
+            System.out.println("[REST] ASSEMBLED BY " + collectorCamera.getName() + " " + collectorCamera.getSurname() + "\n" +
                     camera.toString());
         } else {
+
+            collectors = employeeControllerGrpc.getCollectors();
+
+            collectorCameraBack = this.inputDataHandler.getRandomFromList(collectors);
+            collectorCameraBody = this.inputDataHandler.getRandomFromList(collectors);
+            collectorCameraLens = this.inputDataHandler.getRandomFromList(collectors);
+            collectorCamera = this.inputDataHandler.getRandomFromList(collectors);
+
             CameraBack cameraBack = serviceControllerGrpc.assembleBack(collectorCameraBack, backDimensions,
                     resolutionBack, colorDepth);
             CameraBody cameraBody = serviceControllerGrpc.assemleBody(collectorCameraBody, bodyDimensions, color);
@@ -81,52 +98,69 @@ public final class ProductLifecycle {
     }
 
     public Camera calibrating(Camera camera, Boolean grpc) {
+        Camera newCamera;
 
         if(!grpc) {
-
             MachineController machineController = new MachineController();
 
             List<Calibrator> calibrators = machineController.getAllCalibrators();
             Machine calibrator = inputDataHandler.getRandomFromList(calibrators);
 
             CalibrationController calibrationController = new CalibrationController((Calibrator) calibrator);
-            Camera newCamera = calibrationController.calibrateCamera(camera);
-            System.out.println("CALIBRATED BY " + calibrator.getName() + "\n" + newCamera);
+            newCamera = calibrationController.calibrateCamera(camera);
+            System.out.println("[REST] CALIBRATED BY " + calibrator.getName() + "\n" + newCamera);
 
         } else {
             MachineControllerGrpc machineControllerGrpc = new MachineControllerGrpc(channel);
 
             List<Calibrator> calibrators = machineControllerGrpc.getCalibrators();
             Machine calibrator = inputDataHandler.getRandomFromList(calibrators);
-
-            Camera newCamera = this.serviceControllerGrpc.calibrateCamera((Calibrator) calibrator, camera);
+            newCamera = this.serviceControllerGrpc.calibrateCamera((Calibrator) calibrator, camera);
         }
 
-        return camera;
+        return newCamera;
     }
 
     public Camera finalStage(Camera camera, Boolean grpc) {
         EmployeeController employeeController = new EmployeeController();
         MachineController machineController = new MachineController();
+        EmployeeControllerGrpc employeeControllerGrpc = new EmployeeControllerGrpc(this.channel);
+        MachineControllerGrpc machineControllerGrpc = new MachineControllerGrpc(this.channel);
 
-        List<Technician> technicians = employeeController.getAllTechnicians();
-        List<Manager> managers = employeeController.getAllManagers();
-        List<Packer> packers = machineController.getAllPackers();
+        List<Technician> technicians;
+        List<Manager> managers;
+        List<Packer> packers;
 
-        Employee technician = inputDataHandler.getRandomFromList(technicians);
-        Employee manager = inputDataHandler.getRandomFromList(managers);
-        Machine packer = inputDataHandler.getRandomFromList(packers);
+        Employee technician;
+        Employee manager;
+        Machine packer;
         Camera finalCamera = null;
 
         if(!grpc) {
+            technicians = employeeController.getAllTechnicians();
+            managers = employeeController.getAllManagers();
+            packers = machineController.getAllPackers();
+
+            technician = inputDataHandler.getRandomFromList(technicians);
+            manager = inputDataHandler.getRandomFromList(managers);
+            packer = inputDataHandler.getRandomFromList(packers);
+
             FinalStageController finalStageController =
                     new FinalStageController((Technician) technician, (Manager) manager, (Packer) packer);
 
             finalCamera = finalStageController.finalStage(camera);
-            System.out.println("FINAL STAGE\n" + "MANAGER " + manager.getName() + " " + manager.getSurname() + "\n" +
+            System.out.println("[REST] FINAL STAGE\n" + "MANAGER " + manager.getName() + " " + manager.getSurname() + "\n" +
                     "TECHNICIAN " + technician.getName() + " " + technician.getSurname() + "\n" +
                     "PACKER MACHINE " + packer.getName() + "\n" + finalCamera);
         } else {
+            technicians = employeeControllerGrpc.getTechnicians();
+            managers = employeeControllerGrpc.getManagers();
+            packers = machineControllerGrpc.getPackers();
+
+            technician = inputDataHandler.getRandomFromList(technicians);
+            manager = inputDataHandler.getRandomFromList(managers);
+            packer = inputDataHandler.getRandomFromList(packers);
+
             finalCamera = this.serviceControllerGrpc.finalStage((Technician) technician, (Packer) packer,
                     (Manager) manager, camera);
         }

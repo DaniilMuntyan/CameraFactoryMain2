@@ -15,10 +15,6 @@ import io.grpc.ManagedChannelBuilder;
 import kpi.trspo.restapp.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class ServiceControllerGrpc {
 
@@ -44,7 +40,7 @@ public class ServiceControllerGrpc {
 
         CameraGrpc cameraGrpc = finalStageResponse.getCamera();
         Camera newCamera = CameraConverter.convert(cameraGrpc);
-        System.out.println("FINAL STAGE CAMERA: " + newCamera.toString());
+        System.out.println("[GRPC] FINAL STAGE CAMERA: " + newCamera.toString());
         return newCamera;
     }
 
@@ -60,7 +56,7 @@ public class ServiceControllerGrpc {
 
         CameraGrpc cameraGrpc = calibrateCameraResponse.getCamera();
         Camera newCamera = CameraConverter.convert(cameraGrpc);
-        System.out.println("CALIBRATED CAMERA: " + newCamera.toString());
+        System.out.println("[GRPC] CALIBRATED CAMERA: " + newCamera.toString());
         return newCamera;
     }
 
@@ -82,7 +78,7 @@ public class ServiceControllerGrpc {
 
         CameraGrpc cameraGrpc = assembleCameraResponse.getCamera();
         Camera camera = CameraConverter.convert(cameraGrpc);
-        System.out.println("ASSEMBLED CAMERA: " + camera.toString());
+        System.out.println("[GRPC] ASSEMBLED CAMERA: " + camera.toString());
         return camera;
     }
 
@@ -99,7 +95,7 @@ public class ServiceControllerGrpc {
 
         CameraLensGrpc cameraLensGrpc = assembleLensResponse.getCameraLens();
         CameraLens cameraLens = CameraLensConverter.convert(cameraLensGrpc);
-        System.out.println("ASSEMBLED CAMERA LENS: " + cameraLens.toString());
+        System.out.println("[GRPC] ASSEMBLED CAMERA LENS: " + cameraLens.toString());
         return cameraLens;
     }
 
@@ -120,7 +116,7 @@ public class ServiceControllerGrpc {
 
         CameraBodyGrpc cameraBodyGrpc = assembleBodyResponse.getCameraBody();
         CameraBody cameraBody = CameraBodyConverter.convert(cameraBodyGrpc);
-        System.out.println("ASSEMBLED CAMERA BODY: " + cameraBody.toString());
+        System.out.println("[GRPC] ASSEMBLED CAMERA BODY: " + cameraBody.toString());
         return cameraBody;
     }
 
@@ -140,10 +136,9 @@ public class ServiceControllerGrpc {
                 .setColorDepth(colorDepth)
                 .setResolution(resolution)
                 .build());
-
         CameraBackGrpc cameraBackGrpc = assembleBackResponse.getCameraBack();
         CameraBack cameraBack = CameraBackConverter.convert(cameraBackGrpc);
-        System.out.println("ASSEMBLED CAMERA BACK: " + cameraBack.toString());
+        System.out.println("[GRPC] ASSEMBLED CAMERA BACK: " + cameraBack.toString());
         return cameraBack;
     }
 }

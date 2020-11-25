@@ -1,9 +1,11 @@
+import controllers.EndPoints;
 import controllers.GlobalVariables;
 import controllers.grpc.*;
 import entities.camera.Camera;
 import entities.employees.Manager;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import kpi.trspo.restapp.CameraGrpc;
 import org.springframework.http.MediaType;
 
 public class Main {
@@ -17,20 +19,15 @@ public class Main {
     public static void main(String[] args) {
         GlobalVariables.headers.setContentType(MediaType.APPLICATION_JSON);
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("104.155.28.150", 6565)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(EndPoints.IP, EndPoints.GRPC_PORT)
                 .usePlaintext()
                 .build();
 
-        //collector.createManager(manager);
-
         ProductLifecycle productLifecycle = new ProductLifecycle(channel);
-
         print();
 
-
-        /*for(int i = 0; i < 6; i++) {
-
-            if(i % 2 == 0) {
+        for (int i = 0; i < 6; i++) {
+            if (i % 2 == 0) {
                 // Assembling
                 Camera newCamera = productLifecycle.assembling(false);
                 print();
@@ -53,6 +50,6 @@ public class Main {
                 print();
             }
 
-        }*/
+        }
     }
 }

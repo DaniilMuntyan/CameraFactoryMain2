@@ -34,7 +34,7 @@ public final class EmployeeControllerGrpc {
 
         TechnicianGrpc technicianGrpc = createTechnicianResponse.getTechnician();
         Technician newTechnician = TechnicianConverter.convert(technicianGrpc);
-        System.out.println("CREATED TECHNICIAN: " + newTechnician.toString());
+        System.out.println("[GRPC] CREATED TECHNICIAN: " + newTechnician.toString());
     }
 
     public void createCollector(Collector collector) {
@@ -50,7 +50,7 @@ public final class EmployeeControllerGrpc {
 
         CollectorGrpc collectorGrpc = createCollectorResponse.getCollector();
         Collector newColector = CollectorConverter.convert(collectorGrpc);
-        System.out.println("CREATED COLLECTOR: " + newColector.toString());
+        System.out.println("[GRPC] CREATED COLLECTOR: " + newColector.toString());
     }
 
     public void createManager(entities.employees.Manager manager) {
@@ -66,7 +66,7 @@ public final class EmployeeControllerGrpc {
 
         ManagerGrpc managerGrpc = createManagerResponse.getManager();
         Manager newManager = ManagerConverter.convert(managerGrpc);
-        System.out.println("CREATED MANAGER: " + newManager.toString());
+        System.out.println("[GRPC] CREATED MANAGER: " + newManager.toString());
     }
 
     public List<Manager> getManagers() {
@@ -82,7 +82,7 @@ public final class EmployeeControllerGrpc {
                 .map(ManagerConverter::convert)
                 .collect(Collectors.toList());
 
-        System.out.println(managers);
+        System.out.println("[GRPC] " + managers);
         return managers;
     }
 
@@ -99,7 +99,7 @@ public final class EmployeeControllerGrpc {
                 .map(TechnicianConverter::convert)
                 .collect(Collectors.toList());
 
-        System.out.println(technicians);
+        System.out.println("[GRPC] " + technicians);
 
         return technicians;
 
@@ -118,7 +118,7 @@ public final class EmployeeControllerGrpc {
                 .map(CollectorConverter::convert)
                 .collect(Collectors.toList());
 
-        System.out.println(collectors);
+        System.out.println("[GRPC] " + collectors);
 
         return collectors;
     }

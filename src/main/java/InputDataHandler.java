@@ -97,7 +97,7 @@ public final class InputDataHandler {
             if (i % 2 == 0) {
                 manager = employeeController
                         .createManager(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
-                System.out.println("CREATED " + manager.toString());
+                System.out.println("[REST] CREATED " + manager.toString());
             } else {
                 employeeControllerGrpc.createManager(new Manager(nameSurnamePhone.get(0),
                         nameSurnamePhone.get(1), nameSurnamePhone.get(2)));
@@ -112,7 +112,6 @@ public final class InputDataHandler {
             Employee technician;
 
             if(i % 2 == 0) {
-
                 collector = employeeController
                         .createCollector(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
 
@@ -120,8 +119,8 @@ public final class InputDataHandler {
                 technician = employeeController
                         .createTechnician(nameSurnamePhone.get(0), nameSurnamePhone.get(1), nameSurnamePhone.get(2));
 
-                System.out.println("CREATED " + collector.toString());
-                System.out.println("CREATED " + technician.toString());
+                System.out.println("[REST] CREATED " + collector.toString());
+                System.out.println("[REST] CREATED " + technician.toString());
             } else {
                 employeeControllerGrpc.createCollector(new Collector(nameSurnamePhone.get(0),
                         nameSurnamePhone.get(1), nameSurnamePhone.get(2)));
@@ -137,8 +136,8 @@ public final class InputDataHandler {
                 Machine calibrator = machineController.createCalibrator(getRandomFromList(dataForTesting.robots));
                 Machine packer = machineController.createPacker(getRandomFromList(dataForTesting.robots));
 
-                System.out.println("CREATED " + calibrator.toString());
-                System.out.println("CREATED " + packer.toString());
+                System.out.println("[REST] CREATED " + calibrator.toString());
+                System.out.println("[REST] CREATED " + packer.toString());
             } else {
                 machineControllerGrpc.createCalibrator(new Calibrator(getRandomFromList(dataForTesting.robots)));
                 machineControllerGrpc.createPacker(new Packer(getRandomFromList(dataForTesting.robots)));

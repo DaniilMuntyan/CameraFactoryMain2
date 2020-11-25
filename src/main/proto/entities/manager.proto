@@ -1,7 +1,7 @@
 syntax = "proto3";
 option java_multiple_files = true;
 import "google/protobuf/empty.proto";
-import "myUuid.proto";
+import "entities/myUuid.proto";
 package kpi.trspo.restapp;
 
 message ManagerGrpc {

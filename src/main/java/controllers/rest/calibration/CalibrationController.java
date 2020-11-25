@@ -17,9 +17,7 @@ public final class CalibrationController {
 
     public Camera calibrateCamera(Camera camera) {
         CalibrateCameraDTO calibrateCameraDTO = new CalibrateCameraDTO(calibrator.getId(), camera);
-
         HttpEntity<CalibrateCameraDTO> calibrateCameraDTOHttpEntity = new HttpEntity<>(calibrateCameraDTO);
-        //System.out.println(calibrateCameraDTOHttpEntity);
         ResponseEntity<Camera> calibrateCameraResponseEntity = GlobalVariables.restTemplate
                 .postForEntity(EndPoints.CALIBRATE_CAMERA, calibrateCameraDTOHttpEntity, Camera.class);
 
